@@ -1,4 +1,4 @@
-# react-input-mask
+# react-masked-input
 
 # Instalation
 ```npm install ```
@@ -42,3 +42,14 @@ The following characters define a mask format
 |     9     |      0-9      |
 |     S     |    a-z, A-Z   |
 |     A     | 0-9, a-z, A-Z |
+
+### Contribute
+
+`npm install`
+`npm run start`
+
+#### Tests
+`npm run test`
+
+#### Build
+`npm run build`
