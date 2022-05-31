@@ -7,12 +7,10 @@ const MaskedInput : React.FC<MaskedInputProps> = (props) => {
 	const [value, setValue] = useState(props.value)
 
 	useEffect(() => {
-		console.log('props.value.changed', props.value)
 		setValue(props.value)
 	}, [props.value])
 
 	useEffect(() => {
-		console.log('initial mask')
 		const { formatted } = maskify(value, mask)
 
 		setValue(formatted)
@@ -21,7 +19,6 @@ const MaskedInput : React.FC<MaskedInputProps> = (props) => {
 
 	const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const value = e.target.value
-		console.log('MaskedInput.onChangeHandler', value)
 
 		const { formatted } = maskify(value, mask)
 

@@ -21,11 +21,12 @@ const development = () => ({
 		sourcemap: true,
 	},
 	plugins: [
-		eslint({ include: ['src/**/*.js', 'src/**/*.ts'] }),
 		resolve({
+			include: ['src'],
 			extensions: ['.js', '.jsx', '.ts', '.tsx'],
 		}),
 		typescript(),
+		eslint({ include: ['src/**/*.js', 'src/**/*.ts'] }),
 		postcss(),
 		replace({
 			preventAssignment: true,
@@ -51,6 +52,9 @@ const production = [
 	{
 		input: 'src/main.ts',
 		output: {
+			globals: {
+				'react': 'React'
+			},
 			file: umd,
 			format: 'umd',
 			name: 'ReactRating',
@@ -61,16 +65,23 @@ const production = [
 			resolve(),
 			typescript(),
 			postcss(),
+			commonjs(),
 			babel({
 				babelHelpers: 'bundled',
 				exclude: 'node_modules/**'
 			})
 		],
+		external: [
+			'react'
+		]
 	},
 	// Minified UMD build
 	{
 		input: 'src/main.ts',
 		output: {
+			globals: {
+				'react': 'React'
+			},
 			file: umd.replace(/\.js/, '.min.js'),
 			format: 'umd',
 			name: 'ReactRating',
@@ -81,11 +92,15 @@ const production = [
 			resolve(),
 			typescript(),
 			postcss(),
+			commonjs(),
 			babel({
 				babelHelpers: 'bundled',
 				exclude: 'node_modules/**'
 			}),
 		],
+		external: [
+			'react'
+		]
 	},
 	// CommonJS (for Node) and ES module (for bundlers) build.
 	{
@@ -94,10 +109,10 @@ const production = [
 			{
 				file: pkg.main,
 				format: 'cjs',
-				exports: 'default',
+				exports: 'auto',
 				sourcemap: true,
 				globals: {
-					react: 'React'
+					'react': 'React'
 				},
 			},
 			{
@@ -105,7 +120,7 @@ const production = [
 				format: 'es',
 				sourcemap: true,
 				globals: {
-					react: 'React'
+					'react': 'React'
 				},
 			}
 		],
@@ -114,11 +129,15 @@ const production = [
 			resolve(),
 			typescript(),
 			postcss(),
+			commonjs(),
 			babel({
 				babelHelpers: 'bundled',
 				exclude: 'node_modules/**'
 			})
 		],
+		external: [
+			'react'
+		]
 	}
 ]
 

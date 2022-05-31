@@ -17,5 +17,8 @@
 	  "build",
 	  "src/**/*.stories.tsx",
 	  "src/**/*.test.tsx"
-	]
+	],
+	"typeAcquisition": { 
+		"include": [ "jest" ] 
+	}
   }

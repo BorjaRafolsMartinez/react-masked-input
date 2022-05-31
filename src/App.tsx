@@ -3,10 +3,9 @@ import MaskInput from './components/MaskedInputTest/MaskedInput'
 
 const App = function () {
 	//const [value, setValue] = useState('100')
-	const [value, setValue] = useState('1234')
-	const mask = '##//SS/####'
+	const [value, setValue] = useState('')
+	const mask = '+00 (00) 0000-0000'
 	const onChange = (value) => {
-		console.log('App.onChange', value)
 		setValue(value)
 	}
 	return (

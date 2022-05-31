@@ -23,6 +23,18 @@ describe('maskify', () => {
 			})
 		})
 
+		it('should not break when value is longer than mask', () => {
+			const mask = '9999-9999'
+			const value = '1234567890123'
+
+			test({
+				mask,
+				value,
+				valid: true,
+				expected: '1234-5678'
+			})
+		})
+
 		it('should render 1234 as \'1234-\' with mask 9999-9999', () => {
 			const mask = '9999-9999'
 			const value = '1234'
@@ -68,7 +80,7 @@ describe('maskify', () => {
 				mask,
 				value,
 				valid: true,
-				expected: '12/'
+				expected: '12'
 			})
 		})
 	})
@@ -96,6 +108,18 @@ describe('maskify', () => {
 				valid: true,
 				expected: '+55 (31) 22'
 			})
+		})
+	})
+
+	it('should render empty string as \'\' with any mask', () => {
+		const mask = '0000'
+		const value = ''
+
+		test({
+			mask,
+			value,
+			valid: true,
+			expected: ''
 		})
 	})
 })
