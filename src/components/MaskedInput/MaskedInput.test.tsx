@@ -15,7 +15,7 @@ describe('Test Component', () => {
 		}
 	})
 
-	const renderComponent = () => render(<MaskedInput {...props} />)
+	const renderComponent = (extraProps = {}) => render(<MaskedInput {...props} {...extraProps}/>)
 
 	it('should render', () => {
 		const component = renderComponent()
@@ -25,6 +25,13 @@ describe('Test Component', () => {
 
 	it('should trigger onChange prop', () => {
 		renderComponent()
+		expect(props.onChange).toBeCalled()
+	})
+
+	it('should be able to render disabled', () => {
+		const component = renderComponent({
+			disabled: true
+		})
 		expect(props.onChange).toBeCalled()
 	})
 })

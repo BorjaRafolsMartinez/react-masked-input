@@ -63,9 +63,9 @@ const production = [
 		plugins: [
 			peerDepsExternal(),
 			resolve(),
-			typescript(),
-			postcss(),
 			commonjs(),
+			typescript( { declaration: true }),
+			postcss(),
 			babel({
 				babelHelpers: 'bundled',
 				exclude: 'node_modules/**'
@@ -90,9 +90,9 @@ const production = [
 		plugins: [
 			peerDepsExternal(),
 			resolve(),
-			typescript(),
-			postcss(),
 			commonjs(),
+			typescript( { declaration: true }),
+			postcss(),
 			babel({
 				babelHelpers: 'bundled',
 				exclude: 'node_modules/**'
@@ -127,7 +127,7 @@ const production = [
 		plugins: [
 			peerDepsExternal(),
 			resolve(),
-			typescript(),
+			typescript({ tsconfig: './tsconfig.json' }),
 			postcss(),
 			commonjs(),
 			babel({
@@ -138,7 +138,7 @@ const production = [
 		external: [
 			'react'
 		]
-	}
+	},
 ]
 
 const config = process.env.ENV === 'production' ? production : development()

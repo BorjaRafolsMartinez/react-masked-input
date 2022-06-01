@@ -25,5 +25,8 @@ module.exports = {
 		'quotes': ['error', 'single'],
 		'semi': ['error', 'never'],
 		'no-trailing-spaces': 'error'
-	}
+	},
+	'ignorePatterns': [
+		'**/dist/**/*'
+	],
 }

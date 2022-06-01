@@ -1,6 +1,5 @@
-import MaskInput from './components/MaskedInputTest/MaskedInput'
-export type { MaskifyReturnValue } from './util/maskity.types'
-import type { MaskedInputProps } from './components/MaskedInputTest/MaskedInput.types'
+import MaskedInput from './components/MaskedInput/MaskedInput'
 
-export type { MaskedInputProps }
-export default MaskInput
+export {
+	MaskedInput
+}

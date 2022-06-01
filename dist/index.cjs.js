@@ -1,5 +1,7 @@
 'use strict';
 
+Object.defineProperty(exports, '__esModule', { value: true });
+
 var React = require('react');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
@@ -118,5 +120,5 @@ var MaskedInput = function (props) {
     return (React__default["default"].createElement("input", { value: value, onChange: onChangeHandler }));
 };
 
-module.exports = MaskedInput;
+exports.MaskedInput = MaskedInput;
 //# sourceMappingURL=index.cjs.js.map

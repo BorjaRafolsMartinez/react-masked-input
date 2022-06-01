@@ -112,5 +112,5 @@ var MaskedInput = function (props) {
     return (React.createElement("input", { value: value, onChange: onChangeHandler }));
 };
 
-export { MaskedInput as default };
+export { MaskedInput };
 //# sourceMappingURL=index.es.js.map

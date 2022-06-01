@@ -1,6 +1,6 @@
 import React from 'react'
 
-export interface MaskedInputProps {
+export interface MaskedInput {
     value: string,
     mask: string,
     onChange(value: string): void,
