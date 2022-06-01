@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Test Component should render 1`] = `
+exports[`MaskedInput should render 1`] = `
 Object {
   "asFragment": [Function],
   "baseElement": <body>

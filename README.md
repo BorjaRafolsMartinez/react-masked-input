@@ -26,7 +26,10 @@ const NumberInput = (props) => {
 | --------  | --------------------- | ----------- |
 | value     | string                |
 | mask      | string                |
+| disabled  | boolean               |
+| readOnly  | boolean               |
 | onChange  | `{Function}` (value: string) => void |
+| onBlur    | `{Function}` (value: string) => void |
 | children? | `{React.ReactElement}`|
 
 ### `Mask`

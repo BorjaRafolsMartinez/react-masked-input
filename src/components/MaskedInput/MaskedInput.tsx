@@ -3,7 +3,7 @@ import maskify from '../../util/maskify'
 import { MaskedInput } from './MaskedInput.types'
 
 const MaskedInput : React.FC<MaskedInput> = (props) => {
-	const { mask, onChange, children } = props
+	const { mask, onChange, onBlur, children, disabled, readOnly } = props
 	const [value, setValue] = useState(props.value)
 
 	useEffect(() => {
@@ -26,16 +26,37 @@ const MaskedInput : React.FC<MaskedInput> = (props) => {
 		onChange(formatted)
 	}
 
+	const onBlurHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const value = e.target.value
+
+		onBlur && onBlur(value)
+	}
+
 	if (children) {
 		return React.cloneElement(children, {
 			value,
-			onChange: onChangeHandler
+			disabled,
+			readOnly,
+			onChange: onChangeHandler,
+			onBlur: onBlurHandler
 		})
 	}
 
 	return (
-		<input value={value} onChange={onChangeHandler}/>
+		<input
+			value={value}
+			onChange={onChangeHandler}
+			onBlur={onBlurHandler}
+			disabled={disabled}
+			readOnly={readOnly} />
 	)
+}
+
+MaskedInput.defaultProps = {
+	value: '',
+	mask: '',
+	onChange: () => {},
+	disabled: false
 }
 
 export default MaskedInput

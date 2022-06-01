@@ -4,5 +4,8 @@ export interface MaskedInput {
     value: string,
     mask: string,
     onChange(value: string): void,
-    children?: React.ReactElement
+    onBlur?(value: string): void,
+    children?: React.ReactElement,
+    disabled?: boolean,
+    readOnly?: boolean
 }

@@ -53,7 +53,6 @@ class MaskFormatter {
 			}
 
 			maskIndex++
-			console.log('run')
 		}
 
 
