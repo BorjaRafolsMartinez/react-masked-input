@@ -54,7 +54,6 @@
                     break;
                 }
                 maskIndex++;
-                console.log('run');
             }
             return this.removeTrailingLiterals(formatted);
         };
@@ -95,7 +94,7 @@
     };
 
     var MaskedInput = function (props) {
-        var mask = props.mask, onChange = props.onChange, children = props.children;
+        var mask = props.mask, onChange = props.onChange, onBlur = props.onBlur, children = props.children, disabled = props.disabled, readOnly = props.readOnly;
         var _a = React.useState(props.value), value = _a[0], setValue = _a[1];
         React.useEffect(function () {
             setValue(props.value);
@@ -111,13 +110,26 @@
             setValue(formatted);
             onChange(formatted);
         };
+        var onBlurHandler = function (e) {
+            var value = e.target.value;
+            onBlur && onBlur(value);
+        };
         if (children) {
             return React__default["default"].cloneElement(children, {
                 value: value,
-                onChange: onChangeHandler
+                disabled: disabled,
+                readOnly: readOnly,
+                onChange: onChangeHandler,
+                onBlur: onBlurHandler
             });
         }
-        return (React__default["default"].createElement("input", { value: value, onChange: onChangeHandler }));
+        return (React__default["default"].createElement("input", { value: value, onChange: onChangeHandler, onBlur: onBlurHandler, disabled: disabled, readOnly: readOnly }));
+    };
+    MaskedInput.defaultProps = {
+        value: '',
+        mask: '',
+        onChange: function () { },
+        disabled: false
     };
 
     exports.MaskedInput = MaskedInput;
