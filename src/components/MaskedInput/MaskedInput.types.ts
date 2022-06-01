@@ -7,5 +7,6 @@ export interface MaskedInput {
     onBlur?(value: string): void,
     children?: React.ReactElement,
     disabled?: boolean,
-    readOnly?: boolean
+    readOnly?: boolean,
+    maskChar?: string,
 }

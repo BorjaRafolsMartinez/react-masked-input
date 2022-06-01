@@ -28,6 +28,7 @@ const NumberInput = (props) => {
 | mask      | string                |
 | disabled  | boolean               |
 | readOnly  | boolean               |
+| maskChar  | string                | if set, all replaceable characters in mask that have not been introduced will be set to this |
 | onChange  | `{Function}` (value: string) => void |
 | onBlur    | `{Function}` (value: string) => void |
 | children? | `{React.ReactElement}`|
@@ -40,6 +41,7 @@ Mask format
 ```
 
 The following characters define a mask format
+
 | Character | Allowed input |
 | --------- | ------------- |
 |     9     |      0-9      |

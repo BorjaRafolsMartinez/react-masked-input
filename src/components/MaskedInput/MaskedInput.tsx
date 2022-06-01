@@ -1,29 +1,44 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import maskify from '../../util/maskify'
 import { MaskedInput } from './MaskedInput.types'
 
 const MaskedInput : React.FC<MaskedInput> = (props) => {
-	const { mask, onChange, onBlur, children, disabled, readOnly } = props
+	const { mask, onChange, onBlur, children, disabled, readOnly, maskChar } = props
 	const [value, setValue] = useState(props.value)
+	const [ selection, setSelection ] = useState<[number, number]>([props.value.length, props.value.length])
+	const ref = useRef<HTMLInputElement>(null)
 
 	useEffect(() => {
 		setValue(props.value)
 	}, [props.value])
 
 	useEffect(() => {
-		const { formatted } = maskify(value, mask)
+		const { formatted } = maskify(value, mask, {
+			maskChar
+		})
 
 		setValue(formatted)
 		onChange(formatted)
 	}, [])
 
+	useEffect(() => {
+		ref.current?.setSelectionRange(...selection)
+	}, [selection])
+
 	const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const { target } = e
+		const { selectionEnd, selectionStart } = target
 		const value = e.target.value
 
-		const { formatted } = maskify(value, mask)
+		const { formatted, addedCharacters } = maskify(value, mask, {
+			cursor: target.selectionEnd,
+			maskChar
+		})
 
 		setValue(formatted)
 		onChange(formatted)
+
+		setSelection([selectionStart + addedCharacters, selectionEnd + addedCharacters])
 	}
 
 	const onBlurHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,7 +53,8 @@ const MaskedInput : React.FC<MaskedInput> = (props) => {
 			disabled,
 			readOnly,
 			onChange: onChangeHandler,
-			onBlur: onBlurHandler
+			onBlur: onBlurHandler,
+			ref
 		})
 	}
 
@@ -48,7 +64,11 @@ const MaskedInput : React.FC<MaskedInput> = (props) => {
 			onChange={onChangeHandler}
 			onBlur={onBlurHandler}
 			disabled={disabled}
-			readOnly={readOnly} />
+			readOnly={readOnly}
+			ref={ref}
+		/>
+
+
 	)
 }
 

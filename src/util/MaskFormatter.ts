@@ -1,3 +1,5 @@
+import { MaskifyFormatterOptions, MaskifyFormatterReturnValue } from './maskity.types'
+
 const tokens = {
 	'0': /\d/,
 	'9': /\d/,
@@ -8,16 +10,21 @@ const tokens = {
 	'L': /[a-zA-Z]/,
 }
 
+
+
 class MaskFormatter {
 
 	mask: string = null
 	leftOverString: string = null
+	options: MaskifyFormatterOptions = {}
+	addedCharacters = 0
 
-	constructor(mask: string) {
+	constructor(mask: string, options: MaskifyFormatterOptions = {}) {
 		this.mask = mask
+		this.options = options
 	}
 
-	maskify(value: string) : string {
+	maskify(value: string) : MaskifyFormatterReturnValue {
 		this.leftOverString = value
 		let formatted = ''
 		let maskIndex = 0
@@ -38,6 +45,9 @@ class MaskFormatter {
 			if (!token) {
 				// Add character to formatted
 				formatted += maskChar
+				if (this.options.cursor && maskChar != value[maskIndex] && this.options.cursor >= maskIndex) {
+					this.addedCharacters++
+				}
 			} else if (token && token.test(this.leftOverString)) {
 				// find first valid character in value for given token
 				const match = this.leftOverString.match(token)
@@ -55,8 +65,39 @@ class MaskFormatter {
 			maskIndex++
 		}
 
+		formatted = this.removeTrailingLiterals(formatted)
 
-		return this.removeTrailingLiterals(formatted)
+
+		if (this.options.maskChar) {
+			formatted = this.fillWithMask(formatted)
+		}
+
+		return {
+			value: formatted,
+			addedCharacters: this.addedCharacters,
+		}
+	}
+
+	/**
+	 *
+	 * @param value
+	 * @returns
+	 */
+	fillWithMask(value: string): string {
+
+		for (let i = value.length; i<=this.mask.length; i++) {
+			const maskChar = this.mask.charAt(i)
+
+			const token = tokens[maskChar]
+
+			if (token) {
+				value+=this.options.maskChar
+			} else {
+				value+=maskChar
+			}
+		}
+
+		return value
 	}
 
 	/**
@@ -83,6 +124,7 @@ class MaskFormatter {
 		const lastCharToken = tokens[charAt]
 
 		if (!lastCharToken) {
+			this.addedCharacters--
 			return this.removeTrailingLiterals(string.slice(0, -1))
 		}
 
