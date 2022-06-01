@@ -18,10 +18,14 @@ var tokens = {
     'L': /[a-zA-Z]/,
 };
 var MaskFormatter = /** @class */ (function () {
-    function MaskFormatter(mask) {
+    function MaskFormatter(mask, options) {
+        if (options === void 0) { options = {}; }
         this.mask = null;
         this.leftOverString = null;
+        this.options = {};
+        this.addedCharacters = 0;
         this.mask = mask;
+        this.options = options;
     }
     MaskFormatter.prototype.maskify = function (value) {
         this.leftOverString = value;
@@ -40,6 +44,9 @@ var MaskFormatter = /** @class */ (function () {
             if (!token) {
                 // Add character to formatted
                 formatted += maskChar;
+                if (this.options.cursor && maskChar != value[maskIndex] && this.options.cursor >= maskIndex) {
+                    this.addedCharacters++;
+                }
             }
             else if (token && token.test(this.leftOverString)) {
                 // find first valid character in value for given token
@@ -55,7 +62,32 @@ var MaskFormatter = /** @class */ (function () {
             }
             maskIndex++;
         }
-        return this.removeTrailingLiterals(formatted);
+        formatted = this.removeTrailingLiterals(formatted);
+        if (this.options.maskChar) {
+            formatted = this.fillWithMask(formatted);
+        }
+        return {
+            value: formatted,
+            addedCharacters: this.addedCharacters,
+        };
+    };
+    /**
+     *
+     * @param value
+     * @returns
+     */
+    MaskFormatter.prototype.fillWithMask = function (value) {
+        for (var i = value.length; i <= this.mask.length; i++) {
+            var maskChar = this.mask.charAt(i);
+            var token = tokens[maskChar];
+            if (token) {
+                value += this.options.maskChar;
+            }
+            else {
+                value += maskChar;
+            }
+        }
+        return value;
     };
     /**
      *
@@ -78,6 +110,7 @@ var MaskFormatter = /** @class */ (function () {
         var charAt = this.mask.charAt(stringLength);
         var lastCharToken = tokens[charAt];
         if (!lastCharToken) {
+            this.addedCharacters--;
             return this.removeTrailingLiterals(string.slice(0, -1));
         }
         return string;
@@ -85,30 +118,47 @@ var MaskFormatter = /** @class */ (function () {
     return MaskFormatter;
 }());
 
-var maskify = function (string, mask) {
-    var mf = new MaskFormatter(mask);
+var maskify = function (string, mask, options) {
+    if (options === void 0) { options = {}; }
+    var mf = new MaskFormatter(mask, options);
+    var _a = mf.maskify(string), value = _a.value, addedCharacters = _a.addedCharacters;
     return {
-        formatted: mf.maskify(string),
-        valid: true
+        formatted: value,
+        valid: true,
+        addedCharacters: addedCharacters,
     };
 };
 
 var MaskedInput = function (props) {
-    var mask = props.mask, onChange = props.onChange, onBlur = props.onBlur, children = props.children, disabled = props.disabled, readOnly = props.readOnly;
+    var mask = props.mask, onChange = props.onChange, onBlur = props.onBlur, children = props.children, disabled = props.disabled, readOnly = props.readOnly, maskChar = props.maskChar;
     var _a = React.useState(props.value), value = _a[0], setValue = _a[1];
+    var _b = React.useState([props.value.length, props.value.length]), selection = _b[0], setSelection = _b[1];
+    var ref = React.useRef(null);
     React.useEffect(function () {
         setValue(props.value);
     }, [props.value]);
     React.useEffect(function () {
-        var formatted = maskify(value, mask).formatted;
+        var formatted = maskify(value, mask, {
+            maskChar: maskChar
+        }).formatted;
         setValue(formatted);
         onChange(formatted);
     }, []);
+    React.useEffect(function () {
+        var _a;
+        (_a = ref.current) === null || _a === void 0 ? void 0 : _a.setSelectionRange.apply(_a, selection);
+    }, [selection]);
     var onChangeHandler = function (e) {
+        var target = e.target;
+        var selectionEnd = target.selectionEnd, selectionStart = target.selectionStart;
         var value = e.target.value;
-        var formatted = maskify(value, mask).formatted;
+        var _a = maskify(value, mask, {
+            cursor: target.selectionEnd,
+            maskChar: maskChar
+        }), formatted = _a.formatted, addedCharacters = _a.addedCharacters;
         setValue(formatted);
         onChange(formatted);
+        setSelection([selectionStart + addedCharacters, selectionEnd + addedCharacters]);
     };
     var onBlurHandler = function (e) {
         var value = e.target.value;
@@ -120,10 +170,11 @@ var MaskedInput = function (props) {
             disabled: disabled,
             readOnly: readOnly,
             onChange: onChangeHandler,
-            onBlur: onBlurHandler
+            onBlur: onBlurHandler,
+            ref: ref
         });
     }
-    return (React__default["default"].createElement("input", { value: value, onChange: onChangeHandler, onBlur: onBlurHandler, disabled: disabled, readOnly: readOnly }));
+    return (React__default["default"].createElement("input", { value: value, onChange: onChangeHandler, onBlur: onBlurHandler, disabled: disabled, readOnly: readOnly, ref: ref }));
 };
 MaskedInput.defaultProps = {
     value: '',

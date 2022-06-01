@@ -1,8 +1,17 @@
+import { MaskifyFormatterOptions, MaskifyFormatterReturnValue } from './maskity.types';
 declare class MaskFormatter {
     mask: string;
     leftOverString: string;
-    constructor(mask: string);
-    maskify(value: string): string;
+    options: MaskifyFormatterOptions;
+    addedCharacters: number;
+    constructor(mask: string, options?: MaskifyFormatterOptions);
+    maskify(value: string): MaskifyFormatterReturnValue;
+    /**
+     *
+     * @param value
+     * @returns
+     */
+    fillWithMask(value: string): string;
     /**
      *
      * @returns boolean

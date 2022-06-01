@@ -7,4 +7,5 @@ export interface MaskedInput {
     children?: React.ReactElement;
     disabled?: boolean;
     readOnly?: boolean;
+    maskChar?: string;
 }
