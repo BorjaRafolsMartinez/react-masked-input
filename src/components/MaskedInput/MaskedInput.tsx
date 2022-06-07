@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import maskify from '../../util/maskify'
 import { MaskedInput } from './MaskedInput.types'
+import './MaskedInput.scss'
 
 const MaskedInput : React.FC<MaskedInput> = (props) => {
 	const { mask, onChange, onBlur, children, disabled, readOnly, maskChar } = props
