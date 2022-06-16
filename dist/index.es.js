@@ -148,7 +148,7 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z = "div {\n  background-color: red;\n}";
+var css_248z = "";
 styleInject(css_248z);
 
 var MaskedInput = function (props) {
