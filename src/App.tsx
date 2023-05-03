@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import MaskedInput from './components/MaskedInput/MaskedInput'
 
 const App = function () {
@@ -8,6 +8,8 @@ const App = function () {
 	const onChange = (value) => {
 		setValue(value)
 	}
+
+	const ref = useRef<HTMLInputElement>(null)
 
 	return (
 		<>
@@ -19,6 +21,12 @@ const App = function () {
 			<MaskedInput value={value} onChange={onChange} mask={mask}>
 				<input name="test"></input>
 			</MaskedInput>
+
+			<MaskedInput value={value} onChange={onChange} mask={mask} ref={ref} />
+
+			<button onClick={() => {
+				ref.current.focus()
+			}}>Focus</button>
 		</>
 	)
 }

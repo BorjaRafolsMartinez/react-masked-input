@@ -18,11 +18,11 @@
 	*/
 	/* eslint-disable no-unused-vars */
 
-	var getOwnPropertySymbols = Object.getOwnPropertySymbols;
-	var hasOwnProperty = Object.prototype.hasOwnProperty;
-	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+	var getOwnPropertySymbols$1 = Object.getOwnPropertySymbols;
+	var hasOwnProperty$1 = Object.prototype.hasOwnProperty;
+	var propIsEnumerable$1 = Object.prototype.propertyIsEnumerable;
 
-	function toObject(val) {
+	function toObject$1(val) {
 	  if (val === null || val === undefined) {
 	    throw new TypeError('Object.assign cannot be called with null or undefined');
 	  }
@@ -30,7 +30,7 @@
 	  return Object(val);
 	}
 
-	function shouldUseNative() {
+	function shouldUseNative$1() {
 	  try {
 	    if (!Object.assign) {
 	      return false;
@@ -78,25 +78,25 @@
 	  }
 	}
 
-	var objectAssign = shouldUseNative() ? Object.assign : function (target, source) {
+	var objectAssign$1 = shouldUseNative$1() ? Object.assign : function (target, source) {
 	  var from;
-	  var to = toObject(target);
+	  var to = toObject$1(target);
 	  var symbols;
 
 	  for (var s = 1; s < arguments.length; s++) {
 	    from = Object(arguments[s]);
 
 	    for (var key in from) {
-	      if (hasOwnProperty.call(from, key)) {
+	      if (hasOwnProperty$1.call(from, key)) {
 	        to[key] = from[key];
 	      }
 	    }
 
-	    if (getOwnPropertySymbols) {
-	      symbols = getOwnPropertySymbols(from);
+	    if (getOwnPropertySymbols$1) {
+	      symbols = getOwnPropertySymbols$1(from);
 
 	      for (var i = 0; i < symbols.length; i++) {
-	        if (propIsEnumerable.call(from, symbols[i])) {
+	        if (propIsEnumerable$1.call(from, symbols[i])) {
 	          to[symbols[i]] = from[symbols[i]];
 	        }
 	      }
@@ -113,10 +113,10 @@
 	 * LICENSE file in the root directory of this source tree.
 	 */
 
-	var ReactPropTypesSecret$1 = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
-	var ReactPropTypesSecret_1 = ReactPropTypesSecret$1;
+	var ReactPropTypesSecret$3 = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
+	var ReactPropTypesSecret_1$1 = ReactPropTypesSecret$3;
 
-	var has$1 = Function.call.bind(Object.prototype.hasOwnProperty);
+	var has$3 = Function.call.bind(Object.prototype.hasOwnProperty);
 
 	/**
 	 * Copyright (c) 2013-present, Facebook, Inc.
@@ -125,16 +125,16 @@
 	 * LICENSE file in the root directory of this source tree.
 	 */
 
-	var printWarning = function () {};
+	var printWarning$1 = function () {};
 
 	{
-	  var ReactPropTypesSecret = ReactPropTypesSecret_1;
+	  var ReactPropTypesSecret$2 = ReactPropTypesSecret_1$1;
 
-	  var loggedTypeFailures = {};
+	  var loggedTypeFailures$1 = {};
 
-	  var has = has$1;
+	  var has$2 = has$3;
 
-	  printWarning = function (text) {
+	  printWarning$1 = function (text) {
 	    var message = 'Warning: ' + text;
 
 	    if (typeof console !== 'undefined') {
@@ -164,10 +164,10 @@
 	 */
 
 
-	function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
+	function checkPropTypes$1(typeSpecs, values, location, componentName, getStack) {
 	  {
 	    for (var typeSpecName in typeSpecs) {
-	      if (has(typeSpecs, typeSpecName)) {
+	      if (has$2(typeSpecs, typeSpecName)) {
 	        var error; // Prop type validation may throw. In case they do, we don't want to
 	        // fail the render phase where it didn't fail before. So we log it.
 	        // After these have been cleaned up, we'll let them throw.
@@ -181,21 +181,21 @@
 	            throw err;
 	          }
 
-	          error = typeSpecs[typeSpecName](values, typeSpecName, componentName, location, null, ReactPropTypesSecret);
+	          error = typeSpecs[typeSpecName](values, typeSpecName, componentName, location, null, ReactPropTypesSecret$2);
 	        } catch (ex) {
 	          error = ex;
 	        }
 
 	        if (error && !(error instanceof Error)) {
-	          printWarning((componentName || 'React class') + ': type specification of ' + location + ' `' + typeSpecName + '` is invalid; the type checker ' + 'function must return `null` or an `Error` but returned a ' + typeof error + '. ' + 'You may have forgotten to pass an argument to the type checker ' + 'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and ' + 'shape all require an argument).');
+	          printWarning$1((componentName || 'React class') + ': type specification of ' + location + ' `' + typeSpecName + '` is invalid; the type checker ' + 'function must return `null` or an `Error` but returned a ' + typeof error + '. ' + 'You may have forgotten to pass an argument to the type checker ' + 'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and ' + 'shape all require an argument).');
 	        }
 
-	        if (error instanceof Error && !(error.message in loggedTypeFailures)) {
+	        if (error instanceof Error && !(error.message in loggedTypeFailures$1)) {
 	          // Only monitor this failure once because there tends to be a lot of the
 	          // same error.
-	          loggedTypeFailures[error.message] = true;
+	          loggedTypeFailures$1[error.message] = true;
 	          var stack = getStack ? getStack() : '';
-	          printWarning('Failed ' + location + ' type: ' + error.message + (stack != null ? stack : ''));
+	          printWarning$1('Failed ' + location + ' type: ' + error.message + (stack != null ? stack : ''));
 	        }
 	      }
 	    }
@@ -208,13 +208,13 @@
 	 */
 
 
-	checkPropTypes.resetWarningCache = function () {
+	checkPropTypes$1.resetWarningCache = function () {
 	  {
-	    loggedTypeFailures = {};
+	    loggedTypeFailures$1 = {};
 	  }
 	};
 
-	var checkPropTypes_1 = checkPropTypes;
+	var checkPropTypes_1$1 = checkPropTypes$1;
 
 	/** @license React v16.14.0
 	 * react.development.js
@@ -228,9 +228,9 @@
 	{
 	  (function () {
 
-	    var _assign = objectAssign;
+	    var _assign = objectAssign$1;
 
-	    var checkPropTypes = checkPropTypes_1;
+	    var checkPropTypes = checkPropTypes_1$1;
 
 	    var ReactVersion = '16.14.0'; // The Symbol used to tag the ReactElement-like types. If there is no native Symbol
 	    // nor polyfill, then a plain number is used for performance.
@@ -2104,6 +2104,101 @@
 
 	var reactDom_development = {};
 
+	/*
+	object-assign
+	(c) Sindre Sorhus
+	@license MIT
+	*/
+	/* eslint-disable no-unused-vars */
+
+	var getOwnPropertySymbols = Object.getOwnPropertySymbols;
+	var hasOwnProperty = Object.prototype.hasOwnProperty;
+	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+
+	function toObject(val) {
+	  if (val === null || val === undefined) {
+	    throw new TypeError('Object.assign cannot be called with null or undefined');
+	  }
+
+	  return Object(val);
+	}
+
+	function shouldUseNative() {
+	  try {
+	    if (!Object.assign) {
+	      return false;
+	    } // Detect buggy property enumeration order in older V8 versions.
+	    // https://bugs.chromium.org/p/v8/issues/detail?id=4118
+
+
+	    var test1 = new String('abc'); // eslint-disable-line no-new-wrappers
+
+	    test1[5] = 'de';
+
+	    if (Object.getOwnPropertyNames(test1)[0] === '5') {
+	      return false;
+	    } // https://bugs.chromium.org/p/v8/issues/detail?id=3056
+
+
+	    var test2 = {};
+
+	    for (var i = 0; i < 10; i++) {
+	      test2['_' + String.fromCharCode(i)] = i;
+	    }
+
+	    var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
+	      return test2[n];
+	    });
+
+	    if (order2.join('') !== '0123456789') {
+	      return false;
+	    } // https://bugs.chromium.org/p/v8/issues/detail?id=3056
+
+
+	    var test3 = {};
+	    'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
+	      test3[letter] = letter;
+	    });
+
+	    if (Object.keys(Object.assign({}, test3)).join('') !== 'abcdefghijklmnopqrst') {
+	      return false;
+	    }
+
+	    return true;
+	  } catch (err) {
+	    // We don't expect any of the above to throw, but better to be safe.
+	    return false;
+	  }
+	}
+
+	var objectAssign = shouldUseNative() ? Object.assign : function (target, source) {
+	  var from;
+	  var to = toObject(target);
+	  var symbols;
+
+	  for (var s = 1; s < arguments.length; s++) {
+	    from = Object(arguments[s]);
+
+	    for (var key in from) {
+	      if (hasOwnProperty.call(from, key)) {
+	        to[key] = from[key];
+	      }
+	    }
+
+	    if (getOwnPropertySymbols) {
+	      symbols = getOwnPropertySymbols(from);
+
+	      for (var i = 0; i < symbols.length; i++) {
+	        if (propIsEnumerable.call(from, symbols[i])) {
+	          to[symbols[i]] = from[symbols[i]];
+	        }
+	      }
+	    }
+	  }
+
+	  return to;
+	};
+
 	var scheduler = {exports: {}};
 
 	var scheduler_development = {};
@@ -2967,6 +3062,116 @@
 		  module.exports = scheduler_development;
 		}
 	} (scheduler));
+
+	/**
+	 * Copyright (c) 2013-present, Facebook, Inc.
+	 *
+	 * This source code is licensed under the MIT license found in the
+	 * LICENSE file in the root directory of this source tree.
+	 */
+
+	var ReactPropTypesSecret$1 = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
+	var ReactPropTypesSecret_1 = ReactPropTypesSecret$1;
+
+	var has$1 = Function.call.bind(Object.prototype.hasOwnProperty);
+
+	/**
+	 * Copyright (c) 2013-present, Facebook, Inc.
+	 *
+	 * This source code is licensed under the MIT license found in the
+	 * LICENSE file in the root directory of this source tree.
+	 */
+
+	var printWarning = function () {};
+
+	{
+	  var ReactPropTypesSecret = ReactPropTypesSecret_1;
+
+	  var loggedTypeFailures = {};
+
+	  var has = has$1;
+
+	  printWarning = function (text) {
+	    var message = 'Warning: ' + text;
+
+	    if (typeof console !== 'undefined') {
+	      console.error(message);
+	    }
+
+	    try {
+	      // --- Welcome to debugging React ---
+	      // This error was thrown as a convenience so that you can use this stack
+	      // to find the callsite that caused this warning to fire.
+	      throw new Error(message);
+	    } catch (x) {
+	      /**/
+	    }
+	  };
+	}
+	/**
+	 * Assert that the values match with the type specs.
+	 * Error messages are memorized and will only be shown once.
+	 *
+	 * @param {object} typeSpecs Map of name to a ReactPropType
+	 * @param {object} values Runtime values that need to be type-checked
+	 * @param {string} location e.g. "prop", "context", "child context"
+	 * @param {string} componentName Name of the component for error messages.
+	 * @param {?Function} getStack Returns the component stack.
+	 * @private
+	 */
+
+
+	function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
+	  {
+	    for (var typeSpecName in typeSpecs) {
+	      if (has(typeSpecs, typeSpecName)) {
+	        var error; // Prop type validation may throw. In case they do, we don't want to
+	        // fail the render phase where it didn't fail before. So we log it.
+	        // After these have been cleaned up, we'll let them throw.
+
+	        try {
+	          // This is intentionally an invariant that gets caught. It's the same
+	          // behavior as without this statement except with a better message.
+	          if (typeof typeSpecs[typeSpecName] !== 'function') {
+	            var err = Error((componentName || 'React class') + ': ' + location + ' type `' + typeSpecName + '` is invalid; ' + 'it must be a function, usually from the `prop-types` package, but received `' + typeof typeSpecs[typeSpecName] + '`.' + 'This often happens because of typos such as `PropTypes.function` instead of `PropTypes.func`.');
+	            err.name = 'Invariant Violation';
+	            throw err;
+	          }
+
+	          error = typeSpecs[typeSpecName](values, typeSpecName, componentName, location, null, ReactPropTypesSecret);
+	        } catch (ex) {
+	          error = ex;
+	        }
+
+	        if (error && !(error instanceof Error)) {
+	          printWarning((componentName || 'React class') + ': type specification of ' + location + ' `' + typeSpecName + '` is invalid; the type checker ' + 'function must return `null` or an `Error` but returned a ' + typeof error + '. ' + 'You may have forgotten to pass an argument to the type checker ' + 'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and ' + 'shape all require an argument).');
+	        }
+
+	        if (error instanceof Error && !(error.message in loggedTypeFailures)) {
+	          // Only monitor this failure once because there tends to be a lot of the
+	          // same error.
+	          loggedTypeFailures[error.message] = true;
+	          var stack = getStack ? getStack() : '';
+	          printWarning('Failed ' + location + ' type: ' + error.message + (stack != null ? stack : ''));
+	        }
+	      }
+	    }
+	  }
+	}
+	/**
+	 * Resets warning cache when testing.
+	 *
+	 * @private
+	 */
+
+
+	checkPropTypes.resetWarningCache = function () {
+	  {
+	    loggedTypeFailures = {};
+	  }
+	};
+
+	var checkPropTypes_1 = checkPropTypes;
 
 	var tracing = {exports: {}};
 
@@ -7623,14 +7828,36 @@
 	  }
 	}
 
-	var css_248z = "div {\n  background-color: red;\n}";
+	var css_248z = "";
 	styleInject(css_248z);
 
-	var MaskedInput = function (props) {
+	var useCombinedRefs = function () {
+	    var refs = [];
+	    for (var _i = 0; _i < arguments.length; _i++) {
+	        refs[_i] = arguments[_i];
+	    }
+	    var targetRef = react.exports.useRef();
+	    react.exports.useEffect(function () {
+	        refs.forEach(function (ref) {
+	            if (!ref)
+	                return;
+	            if (typeof ref === 'function') {
+	                ref(targetRef.current);
+	            }
+	            else {
+	                ref.current = targetRef.current;
+	            }
+	        });
+	    }, [refs]);
+	    return targetRef;
+	};
+
+	var MaskedInput = react.exports.forwardRef(function (props, ref) {
 	    var mask = props.mask, onChange = props.onChange, onBlur = props.onBlur, children = props.children, disabled = props.disabled, readOnly = props.readOnly, maskChar = props.maskChar;
 	    var _a = react.exports.useState(props.value), value = _a[0], setValue = _a[1];
 	    var _b = react.exports.useState([props.value.length, props.value.length]), selection = _b[0], setSelection = _b[1];
-	    var ref = react.exports.useRef(null);
+	    var localRef = react.exports.useRef(null);
+	    var inputRef = useCombinedRefs(localRef, ref);
 	    react.exports.useEffect(function () {
 	        setValue(props.value);
 	    }, [props.value]);
@@ -7643,7 +7870,7 @@
 	    }, []);
 	    react.exports.useEffect(function () {
 	        var _a;
-	        (_a = ref.current) === null || _a === void 0 ? void 0 : _a.setSelectionRange.apply(_a, selection);
+	        (_a = inputRef.current) === null || _a === void 0 ? void 0 : _a.setSelectionRange.apply(_a, selection);
 	    }, [selection]);
 	    var onChangeHandler = function (e) {
 	        var target = e.target;
@@ -7668,15 +7895,16 @@
 	            readOnly: readOnly,
 	            onChange: onChangeHandler,
 	            onBlur: onBlurHandler,
-	            ref: ref
+	            ref: inputRef
 	        });
 	    }
-	    return (React.createElement("input", { value: value, onChange: onChangeHandler, onBlur: onBlurHandler, disabled: disabled, readOnly: readOnly, ref: ref }));
-	};
+	    return (React.createElement("input", { value: value, onChange: onChangeHandler, onBlur: onBlurHandler, disabled: disabled, readOnly: readOnly, ref: inputRef }));
+	});
+	MaskedInput.displayName = 'MaskedInput';
 	MaskedInput.defaultProps = {
 	    value: '',
 	    mask: '',
-	    onChange: function () { },
+	    onChange: function () { return void (0); },
 	    disabled: false
 	};
 
@@ -7687,6 +7915,7 @@
 	    var onChange = function (value) {
 	        setValue(value);
 	    };
+	    var ref = react.exports.useRef(null);
 	    return (React.createElement(React.Fragment, null,
 	        React.createElement("h1", null, "App Tests"),
 	        React.createElement("label", null,
@@ -7701,7 +7930,11 @@
 	        React.createElement("br", null),
 	        React.createElement(MaskedInput, { value: value, onChange: onChange, mask: mask }),
 	        React.createElement(MaskedInput, { value: value, onChange: onChange, mask: mask },
-	            React.createElement("input", { name: "test" }))));
+	            React.createElement("input", { name: "test" })),
+	        React.createElement(MaskedInput, { value: value, onChange: onChange, mask: mask, ref: ref }),
+	        React.createElement("button", { onClick: function () {
+	                ref.current.focus();
+	            } }, "Focus")));
 	};
 
 	ReactDOM.render(React.createElement(App), document.querySelector('#root'));

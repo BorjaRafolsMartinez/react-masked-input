@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef, useEffect, forwardRef, useState } from 'react';
 
 var tokens = {
     '0': /\d/,
@@ -151,11 +151,33 @@ function styleInject(css, ref) {
 var css_248z = "";
 styleInject(css_248z);
 
-var MaskedInput = function (props) {
+var useCombinedRefs = function () {
+    var refs = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        refs[_i] = arguments[_i];
+    }
+    var targetRef = useRef();
+    useEffect(function () {
+        refs.forEach(function (ref) {
+            if (!ref)
+                return;
+            if (typeof ref === 'function') {
+                ref(targetRef.current);
+            }
+            else {
+                ref.current = targetRef.current;
+            }
+        });
+    }, [refs]);
+    return targetRef;
+};
+
+var MaskedInput = forwardRef(function (props, ref) {
     var mask = props.mask, onChange = props.onChange, onBlur = props.onBlur, children = props.children, disabled = props.disabled, readOnly = props.readOnly, maskChar = props.maskChar;
     var _a = useState(props.value), value = _a[0], setValue = _a[1];
     var _b = useState([props.value.length, props.value.length]), selection = _b[0], setSelection = _b[1];
-    var ref = useRef(null);
+    var localRef = useRef(null);
+    var inputRef = useCombinedRefs(localRef, ref);
     useEffect(function () {
         setValue(props.value);
     }, [props.value]);
@@ -168,7 +190,7 @@ var MaskedInput = function (props) {
     }, []);
     useEffect(function () {
         var _a;
-        (_a = ref.current) === null || _a === void 0 ? void 0 : _a.setSelectionRange.apply(_a, selection);
+        (_a = inputRef.current) === null || _a === void 0 ? void 0 : _a.setSelectionRange.apply(_a, selection);
     }, [selection]);
     var onChangeHandler = function (e) {
         var target = e.target;
@@ -193,15 +215,16 @@ var MaskedInput = function (props) {
             readOnly: readOnly,
             onChange: onChangeHandler,
             onBlur: onBlurHandler,
-            ref: ref
+            ref: inputRef
         });
     }
-    return (React.createElement("input", { value: value, onChange: onChangeHandler, onBlur: onBlurHandler, disabled: disabled, readOnly: readOnly, ref: ref }));
-};
+    return (React.createElement("input", { value: value, onChange: onChangeHandler, onBlur: onBlurHandler, disabled: disabled, readOnly: readOnly, ref: inputRef }));
+});
+MaskedInput.displayName = 'MaskedInput';
 MaskedInput.defaultProps = {
     value: '',
     mask: '',
-    onChange: function () { },
+    onChange: function () { return void (0); },
     disabled: false
 };
 
