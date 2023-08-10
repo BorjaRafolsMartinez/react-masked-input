@@ -1,7 +1,7 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, ForwardedRef, RefObject, MutableRefObject } from 'react'
 
-const useCombinedRefs = <T>(...refs) => {
-	const targetRef = useRef<T>()
+const useCombinedRefs = <T>(...refs: Array<RefObject<T> | ((instance: T | null) => void) | ForwardedRef<T>>) => {
+	const targetRef = useRef<T>(null)
 
 	useEffect(() => {
 		refs.forEach(ref => {
@@ -9,8 +9,8 @@ const useCombinedRefs = <T>(...refs) => {
 
 			if (typeof ref === 'function') {
 				ref(targetRef.current)
-			} else {
-				ref.current = targetRef.current
+			} else if ('current' in ref) {
+				(ref as MutableRefObject<T | null>).current = targetRef.current
 			}
 		})
 	}, [refs])

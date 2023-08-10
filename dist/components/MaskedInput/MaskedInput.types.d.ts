@@ -1,6 +1,6 @@
 import React, { ChangeEventHandler, FocusEventHandler } from 'react';
 export interface MaskedInputProps {
-    value: string;
+    value?: string | null;
     mask: string;
     onChange: ChangeEventHandler<HTMLInputElement>;
     onBlur?: FocusEventHandler<HTMLInputElement>;

@@ -34,6 +34,18 @@
         return __assign.apply(this, arguments);
     };
 
+    function __rest(s, e) {
+        var t = {};
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+            t[p] = s[p];
+        if (s != null && typeof Object.getOwnPropertySymbols === "function")
+            for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+                if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                    t[p[i]] = s[p[i]];
+            }
+        return t;
+    }
+
     var tokens = {
         '0': /\d/,
         '9': /\d/,
@@ -46,14 +58,15 @@
     var MaskFormatter = /** @class */ (function () {
         function MaskFormatter(mask, options) {
             if (options === void 0) { options = {}; }
-            this.mask = null;
-            this.leftOverString = null;
+            this.mask = '';
+            this.leftOverString = '';
             this.options = {};
             this.addedCharacters = 0;
             this.mask = mask;
             this.options = options;
         }
         MaskFormatter.prototype.maskify = function (value) {
+            var _a, _b;
             this.leftOverString = value;
             var formatted = '';
             var maskIndex = 0;
@@ -77,8 +90,11 @@
                 else if (token && token.test(this.leftOverString)) {
                     // find first valid character in value for given token
                     var match = this.leftOverString.match(token);
-                    var value_1 = match[0];
-                    var index = match['index'];
+                    if (!match) {
+                        break;
+                    }
+                    var value_1 = (_a = match[0]) !== null && _a !== void 0 ? _a : 0;
+                    var index = (_b = match['index']) !== null && _b !== void 0 ? _b : 0;
                     formatted += value_1;
                     this.leftOverString = this.leftOverString.slice(index + 1);
                 }
@@ -190,7 +206,7 @@
         for (var _i = 0; _i < arguments.length; _i++) {
             refs[_i] = arguments[_i];
         }
-        var targetRef = React.useRef();
+        var targetRef = React.useRef(null);
         React.useEffect(function () {
             refs.forEach(function (ref) {
                 if (!ref)
@@ -198,7 +214,7 @@
                 if (typeof ref === 'function') {
                     ref(targetRef.current);
                 }
-                else {
+                else if ('current' in ref) {
                     ref.current = targetRef.current;
                 }
             });
@@ -207,16 +223,16 @@
     };
 
     var MaskedInput = React.forwardRef(function (props, ref) {
-        var mask = props.mask, onChange = props.onChange, onBlur = props.onBlur, children = props.children, disabled = props.disabled, readOnly = props.readOnly, maskChar = props.maskChar;
-        var _a = React.useState(props.value), value = _a[0], setValue = _a[1];
-        var _b = React.useState([props.value.length, props.value.length]), selection = _b[0], setSelection = _b[1];
+        var mask = props.mask, onChange = props.onChange, onBlur = props.onBlur, children = props.children, disabled = props.disabled, readOnly = props.readOnly, maskChar = props.maskChar, value = props.value, rest = __rest(props, ["mask", "onChange", "onBlur", "children", "disabled", "readOnly", "maskChar", "value"]);
+        var _a = React.useState(value || ''), localValue = _a[0], setValue = _a[1];
+        var _b = React.useState([localValue.length, localValue.length]), selection = _b[0], setSelection = _b[1];
         var localRef = React.useRef(null);
         var inputRef = useCombinedRefs(localRef, ref);
         React.useEffect(function () {
-            setValue(props.value);
+            setValue(props.value || '');
         }, [props.value]);
         React.useEffect(function () {
-            var formatted = maskify(value, mask, {
+            var formatted = maskify(localValue, mask, {
                 maskChar: maskChar
             }).formatted;
             setValue(formatted);
@@ -230,44 +246,28 @@
         React.useEffect(function () {
             var _a;
             (_a = inputRef.current) === null || _a === void 0 ? void 0 : _a.setSelectionRange.apply(_a, selection);
-            console.log('selection', selection);
         }, [selection]);
         var onChangeHandler = function (event) {
+            var _a;
             var target = event.target;
             var selectionEnd = target.selectionEnd, selectionStart = target.selectionStart;
             var value = event.target.value;
-            var _a = maskify(value, mask, {
-                cursor: target.selectionEnd,
+            var _b = maskify(value, mask, {
+                cursor: (_a = target.selectionEnd) !== null && _a !== void 0 ? _a : 0,
                 maskChar: maskChar
-            }), formatted = _a.formatted, addedCharacters = _a.addedCharacters;
+            }), formatted = _b.formatted, addedCharacters = _b.addedCharacters;
             setValue(formatted);
-            setSelection([selectionStart + addedCharacters, selectionEnd + addedCharacters]);
-            console.log('selectionData', {
-                selectionStart: selectionStart,
-                selectionEnd: selectionEnd,
-            });
+            setSelection([selectionStart !== null && selectionStart !== void 0 ? selectionStart : 0 + addedCharacters, selectionEnd !== null && selectionEnd !== void 0 ? selectionEnd : 0 + addedCharacters]);
             event.target.value = formatted; // Update the input value
-            if (onChange) {
-                console.log('onChange', event.target.value);
-                var syntheticEvent = __assign(__assign({}, event), { currentTarget: target, target: target });
-                onChange(syntheticEvent);
-            }
+            onChange === null || onChange === void 0 ? void 0 : onChange(event);
         };
         if (children) {
-            return React__default["default"].cloneElement(children, {
-                value: value,
-                disabled: disabled,
-                readOnly: readOnly,
-                onChange: onChangeHandler,
-                onBlur: onBlur,
-                ref: inputRef
-            });
+            return React__default["default"].cloneElement(children, __assign(__assign(__assign({}, (value ? { value: value } : {})), { disabled: disabled, readOnly: readOnly, onChange: onChangeHandler, onBlur: onBlur, ref: inputRef }), rest));
         }
-        return (React__default["default"].createElement("input", { value: value, onChange: onChangeHandler, onBlur: onBlur, disabled: disabled, readOnly: readOnly, ref: inputRef }));
+        return (React__default["default"].createElement("input", __assign({ value: value !== null ? value : '', onChange: onChangeHandler, onBlur: onBlur, disabled: disabled, readOnly: readOnly, ref: inputRef }, rest)));
     });
     MaskedInput.displayName = 'MaskedInput';
     MaskedInput.defaultProps = {
-        value: '',
         mask: '',
         onChange: function () { return void (0); },
         disabled: false
