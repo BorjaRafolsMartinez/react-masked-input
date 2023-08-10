@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, forwardRef } from 'react'
+import React, { useEffect, useRef, useState, forwardRef, ChangeEvent } from 'react'
 import maskify from '../../util/maskify'
 import { MaskedInputProps } from './MaskedInput.types'
 import './MaskedInput.scss'
@@ -41,12 +41,21 @@ const MaskedInput = forwardRef<HTMLInputElement, MaskedInputProps>((props, ref) 
 			cursor: target.selectionEnd,
 			maskChar
 		})
+
 		setValue(formatted)
-		event.target.value = formatted // Update the input value
-		const nativeEvent = new Event('input', { bubbles: true, cancelable: true })
-		Object.defineProperty(nativeEvent, 'target', { value: event.target, enumerable: true })
 		setSelection([selectionStart + addedCharacters, selectionEnd + addedCharacters])
-		event.target.dispatchEvent(nativeEvent) // Trigger native input event
+
+		event.target.value = formatted // Update the input value
+
+		if (onChange) {
+			const syntheticEvent = {
+				...event,
+				currentTarget: target,
+				target,
+			} as ChangeEvent<HTMLInputElement>
+
+			onChange(syntheticEvent)
+		}
 	}
 
 	if (children) {

@@ -5,8 +5,8 @@ const App = function () {
 	//const [value, setValue] = useState('100')
 	const [value, setValue] = useState('')
 	const mask = '+00 (00) 0000-0000'
-	const onChange = (value) => {
-		setValue(value)
+	const onChange = (e) => {
+		setValue(e.target.value)
 	}
 
 	const ref = useRef<HTMLInputElement>(null)
