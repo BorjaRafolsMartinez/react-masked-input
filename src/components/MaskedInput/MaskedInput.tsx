@@ -21,33 +21,32 @@ const MaskedInput = forwardRef<HTMLInputElement, MaskedInputProps>((props, ref) 
 		})
 
 		setValue(formatted)
-		onChange(formatted)
+		const fakeEvent = {
+			target: {
+				value: formatted,
+			},
+		} as React.ChangeEvent<HTMLInputElement>
+		onChange(fakeEvent)
 	}, [])
 
 	useEffect(() => {
 		inputRef.current?.setSelectionRange(...selection)
 	}, [selection])
 
-	const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const { target } = e
+	const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const { target } = event
 		const { selectionEnd, selectionStart } = target
-		const value = e.target.value
-
+		const value = event.target.value
 		const { formatted, addedCharacters } = maskify(value, mask, {
 			cursor: target.selectionEnd,
 			maskChar
 		})
-
 		setValue(formatted)
-		onChange(formatted)
-
+		event.target.value = formatted // Update the input value
+		const nativeEvent = new Event('input', { bubbles: true, cancelable: true })
+		Object.defineProperty(nativeEvent, 'target', { value: event.target, enumerable: true })
 		setSelection([selectionStart + addedCharacters, selectionEnd + addedCharacters])
-	}
-
-	const onBlurHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const value = e.target.value
-
-		onBlur && onBlur(value)
+		event.target.dispatchEvent(nativeEvent) // Trigger native input event
 	}
 
 	if (children) {
@@ -56,7 +55,7 @@ const MaskedInput = forwardRef<HTMLInputElement, MaskedInputProps>((props, ref) 
 			disabled,
 			readOnly,
 			onChange: onChangeHandler,
-			onBlur: onBlurHandler,
+			onBlur: onBlur,
 			ref: inputRef
 		})
 	}
@@ -65,7 +64,7 @@ const MaskedInput = forwardRef<HTMLInputElement, MaskedInputProps>((props, ref) 
 		<input
 			value={value}
 			onChange={onChangeHandler}
-			onBlur={onBlurHandler}
+			onBlur={onBlur}
 			disabled={disabled}
 			readOnly={readOnly}
 			ref={inputRef}

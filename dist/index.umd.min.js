@@ -194,27 +194,43 @@
                 maskChar: maskChar
             }).formatted;
             setValue(formatted);
-            onChange(formatted);
+            var fakeEvent = {
+                target: {
+                    value: formatted,
+                },
+            };
+            onChange(fakeEvent);
         }, []);
         React.useEffect(function () {
             var _a;
             (_a = inputRef.current) === null || _a === void 0 ? void 0 : _a.setSelectionRange.apply(_a, selection);
         }, [selection]);
-        var onChangeHandler = function (e) {
-            var target = e.target;
+        // const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+        // 	const { target } = e
+        // 	const { selectionEnd, selectionStart } = target
+        // 	const value = e.target.value
+        // 	const { formatted, addedCharacters } = maskify(value, mask, {
+        // 		cursor: target.selectionEnd,
+        // 		maskChar
+        // 	})
+        // 	setValue(formatted)
+        // 	onChange(formatted)
+        // 	setSelection([selectionStart + addedCharacters, selectionEnd + addedCharacters])
+        // }
+        var onChangeHandler = function (event) {
+            var target = event.target;
             var selectionEnd = target.selectionEnd, selectionStart = target.selectionStart;
-            var value = e.target.value;
+            var value = event.target.value;
             var _a = maskify(value, mask, {
                 cursor: target.selectionEnd,
                 maskChar: maskChar
             }), formatted = _a.formatted, addedCharacters = _a.addedCharacters;
             setValue(formatted);
-            onChange(formatted);
+            event.target.value = formatted; // Update the input value
+            var nativeEvent = new Event('input', { bubbles: true, cancelable: true });
+            Object.defineProperty(nativeEvent, 'target', { value: event.target, enumerable: true });
             setSelection([selectionStart + addedCharacters, selectionEnd + addedCharacters]);
-        };
-        var onBlurHandler = function (e) {
-            var value = e.target.value;
-            onBlur && onBlur(value);
+            event.target.dispatchEvent(nativeEvent); // Trigger native input event
         };
         if (children) {
             return React__default["default"].cloneElement(children, {
@@ -222,11 +238,11 @@
                 disabled: disabled,
                 readOnly: readOnly,
                 onChange: onChangeHandler,
-                onBlur: onBlurHandler,
+                onBlur: onBlur,
                 ref: inputRef
             });
         }
-        return (React__default["default"].createElement("input", { value: value, onChange: onChangeHandler, onBlur: onBlurHandler, disabled: disabled, readOnly: readOnly, ref: inputRef }));
+        return (React__default["default"].createElement("input", { value: value, onChange: onChangeHandler, onBlur: onBlur, disabled: disabled, readOnly: readOnly, ref: inputRef }));
     });
     MaskedInput.displayName = 'MaskedInput';
     MaskedInput.defaultProps = {
