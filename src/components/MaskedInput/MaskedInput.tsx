@@ -36,6 +36,8 @@ const MaskedInput = forwardRef<HTMLInputElement, MaskedInputProps>((props, ref) 
 	const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
 		const { target } = event
 		const { selectionEnd, selectionStart } = target
+		const start = selectionStart ?? 0
+		const end = selectionEnd ?? 0
 		const value = event.target.value
 		const { formatted, addedCharacters } = maskify(value, mask, {
 			cursor: target.selectionEnd ?? 0,
@@ -43,7 +45,7 @@ const MaskedInput = forwardRef<HTMLInputElement, MaskedInputProps>((props, ref) 
 		})
 
 		setValue(formatted)
-		setSelection([selectionStart ?? 0 + addedCharacters, selectionEnd ?? 0 + addedCharacters])
+		setSelection([start   + addedCharacters, end   + addedCharacters])
 
 		event.target.value = formatted // Update the input value
 
@@ -53,7 +55,7 @@ const MaskedInput = forwardRef<HTMLInputElement, MaskedInputProps>((props, ref) 
 
 	if (children) {
 		return React.cloneElement(children, {
-			...(value ? {value} : {}),
+			...(value  !== null ? {value} : {}),
 			disabled,
 			readOnly,
 			onChange: onChangeHandler,

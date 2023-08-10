@@ -251,18 +251,20 @@
             var _a;
             var target = event.target;
             var selectionEnd = target.selectionEnd, selectionStart = target.selectionStart;
+            var start = selectionStart !== null && selectionStart !== void 0 ? selectionStart : 0;
+            var end = selectionEnd !== null && selectionEnd !== void 0 ? selectionEnd : 0;
             var value = event.target.value;
             var _b = maskify(value, mask, {
                 cursor: (_a = target.selectionEnd) !== null && _a !== void 0 ? _a : 0,
                 maskChar: maskChar
             }), formatted = _b.formatted, addedCharacters = _b.addedCharacters;
             setValue(formatted);
-            setSelection([selectionStart !== null && selectionStart !== void 0 ? selectionStart : 0 + addedCharacters, selectionEnd !== null && selectionEnd !== void 0 ? selectionEnd : 0 + addedCharacters]);
+            setSelection([start + addedCharacters, end + addedCharacters]);
             event.target.value = formatted; // Update the input value
             onChange === null || onChange === void 0 ? void 0 : onChange(event);
         };
         if (children) {
-            return React__default["default"].cloneElement(children, __assign(__assign(__assign({}, (value ? { value: value } : {})), { disabled: disabled, readOnly: readOnly, onChange: onChangeHandler, onBlur: onBlur, ref: inputRef }), rest));
+            return React__default["default"].cloneElement(children, __assign(__assign(__assign({}, (value !== null ? { value: value } : {})), { disabled: disabled, readOnly: readOnly, onChange: onChangeHandler, onBlur: onBlur, ref: inputRef }), rest));
         }
         return (React__default["default"].createElement("input", __assign({ value: value !== null ? value : '', onChange: onChangeHandler, onBlur: onBlur, disabled: disabled, readOnly: readOnly, ref: inputRef }, rest)));
     });
