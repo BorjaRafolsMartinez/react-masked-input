@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { ChangeEventHandler, FocusEventHandler } from 'react'
 
 export interface MaskedInputProps {
     value: string,
     mask: string,
-    onChange(value: string): void,
-    onBlur?(value: string): void,
+    onChange: ChangeEventHandler<HTMLInputElement>
+    onBlur?: FocusEventHandler<HTMLInputElement>
     children?: React.ReactElement,
     disabled?: boolean,
     readOnly?: boolean,
