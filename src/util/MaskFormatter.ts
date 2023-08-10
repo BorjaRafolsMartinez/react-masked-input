@@ -1,6 +1,6 @@
 import { MaskifyFormatterOptions, MaskifyFormatterReturnValue } from './maskity.types'
 
-const tokens = {
+const tokens: Record<string, RegExp> = {
 	'0': /\d/,
 	'9': /\d/,
 	'#': /\d/,
@@ -14,8 +14,8 @@ const tokens = {
 
 class MaskFormatter {
 
-	mask: string = null
-	leftOverString: string = null
+	mask = ''
+	leftOverString = ''
 	options: MaskifyFormatterOptions = {}
 	addedCharacters = 0
 
@@ -52,8 +52,12 @@ class MaskFormatter {
 				// find first valid character in value for given token
 				const match = this.leftOverString.match(token)
 
-				const value = match[0]
-				const index = match['index']
+				if (!match) {
+					break
+				}
+
+				const value = match[0] ?? 0
+				const index = match['index'] ?? 0
 
 				formatted += value
 				this.leftOverString = this.leftOverString.slice(index + 1)

@@ -27,6 +27,8 @@ module.exports = {
 		'no-trailing-spaces': 'error'
 	},
 	'ignorePatterns': [
-		'**/dist/**/*'
+		'**/dist/**/*',
+		'/dist',
+		'storybook-static'
 	],
 }
