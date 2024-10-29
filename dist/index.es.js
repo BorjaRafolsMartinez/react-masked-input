@@ -57,8 +57,9 @@ var MaskFormatter = /** @class */ (function () {
         this.mask = mask;
         this.options = options;
     }
-    MaskFormatter.prototype.maskify = function (value) {
+    MaskFormatter.prototype.maskify = function (value, prevValue) {
         var _a, _b;
+        if (prevValue === void 0) { prevValue = null; }
         this.leftOverString = value;
         var formatted = '';
         var maskIndex = 0;
@@ -96,7 +97,9 @@ var MaskFormatter = /** @class */ (function () {
             }
             maskIndex++;
         }
-        formatted = this.removeTrailingLiterals(formatted);
+        if ((prevValue && prevValue.length > value.length) || !prevValue) {
+            formatted = this.removeTrailingLiterals(formatted);
+        }
         if (this.options.maskChar) {
             formatted = this.fillWithMask(formatted);
         }
@@ -152,10 +155,11 @@ var MaskFormatter = /** @class */ (function () {
     return MaskFormatter;
 }());
 
-var maskify = function (string, mask, options) {
+var maskify = function (string, mask, options, prevValue) {
     if (options === void 0) { options = {}; }
+    if (prevValue === void 0) { prevValue = null; }
     var mf = new MaskFormatter(mask, options);
-    var _a = mf.maskify(string), value = _a.value, addedCharacters = _a.addedCharacters;
+    var _a = mf.maskify(string, prevValue), value = _a.value, addedCharacters = _a.addedCharacters;
     return {
         formatted: value,
         valid: true,
@@ -249,7 +253,13 @@ var MaskedInput = forwardRef(function (props, ref) {
         var _b = maskify(value, mask, {
             cursor: (_a = target.selectionEnd) !== null && _a !== void 0 ? _a : 0,
             maskChar: maskChar
-        }), formatted = _b.formatted, addedCharacters = _b.addedCharacters;
+        }, localValue), formatted = _b.formatted, addedCharacters = _b.addedCharacters;
+        console.log('formatted', {
+            value: value,
+            mask: mask,
+            formatted: formatted,
+            addedCharacters: addedCharacters
+        });
         setValue(formatted);
         setSelection([start + addedCharacters, end + addedCharacters]);
         event.target.value = formatted; // Update the input value

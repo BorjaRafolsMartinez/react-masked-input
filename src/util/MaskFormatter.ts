@@ -24,7 +24,7 @@ class MaskFormatter {
 		this.options = options
 	}
 
-	maskify(value: string) : MaskifyFormatterReturnValue {
+	maskify(value: string, prevValue: string|null = null) : MaskifyFormatterReturnValue {
 		this.leftOverString = value
 		let formatted = ''
 		let maskIndex = 0
@@ -69,7 +69,9 @@ class MaskFormatter {
 			maskIndex++
 		}
 
-		formatted = this.removeTrailingLiterals(formatted)
+		if ((prevValue && prevValue.length > value.length) || !prevValue) {
+			formatted = this.removeTrailingLiterals(formatted)
+		}
 
 
 		if (this.options.maskChar) {

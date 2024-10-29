@@ -42,6 +42,13 @@ const MaskedInput = forwardRef<HTMLInputElement, MaskedInputProps>((props, ref) 
 		const { formatted, addedCharacters } = maskify(value, mask, {
 			cursor: target.selectionEnd ?? 0,
 			maskChar
+		}, localValue)
+
+		console.log('formatted', {
+			value,
+			mask,
+			formatted,
+			addedCharacters
 		})
 
 		setValue(formatted)

@@ -16,4 +16,5 @@ export interface MaskifyTestObject {
     value: string;
     expected: string;
     valid: boolean;
+    prevValue?: string;
 }

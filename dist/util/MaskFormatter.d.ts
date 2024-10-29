@@ -5,7 +5,7 @@ declare class MaskFormatter {
     options: MaskifyFormatterOptions;
     addedCharacters: number;
     constructor(mask: string, options?: MaskifyFormatterOptions);
-    maskify(value: string): MaskifyFormatterReturnValue;
+    maskify(value: string, prevValue?: string | null): MaskifyFormatterReturnValue;
     /**
      *
      * @param value

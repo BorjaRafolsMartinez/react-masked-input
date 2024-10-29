@@ -2,8 +2,8 @@ import maskify from './maskify'
 import { MaskifyTestObject } from './maskity.types'
 
 const test = (p: MaskifyTestObject) => {
-	const { mask, value, expected, valid } = p
-	const result = maskify(value, mask)
+	const { mask, value, expected, valid, prevValue } = p
+	const result = maskify(value, mask, {}, prevValue)
 	expect(result.valid).toBe(valid)
 	expect(result.formatted).toBe(expected)
 }
@@ -20,6 +20,32 @@ describe('maskify', () => {
 				value,
 				valid: true,
 				expected: '1234-5678'
+			})
+		})
+
+		it('should allow inputting mask characters', () => {
+			const mask = '9999-9999'
+			const value = '1234-'
+
+			test({
+				mask,
+				value,
+				valid: true,
+				expected: '1234-',
+				prevValue: '1234'
+			})
+		})
+
+		it('should allow inputing mask characters but still remove trailerCharacters if user is removing characters', () => {
+			const mask = '9999-9999'
+			const value = '1234-'
+
+			test({
+				mask,
+				value,
+				valid: true,
+				expected: '1234',
+				prevValue: '1234-5'
 			})
 		})
 
